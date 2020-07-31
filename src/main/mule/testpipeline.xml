@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="def0c2b0-b5e3-409e-9dc8-c92b18cf790f" >
-		<http:listener-connection host="0.0.0.0" port="8081" />
+		<http:listener-connection host="0.0.0.0" port="8081" protocol="HTTPS" tlsContext="TLS_Context">
+		</http:listener-connection>
 	</http:listener-config>
+	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="a5ebdb62-f7e1-4c05-b6fb-5c2f883e7af1" >
+		<tls:trust-store insecure="true" />
+		<tls:key-store type="jks" path="/Users/longjam.singh/dataweavework-space/cert/test-keystore.jks" alias="test" keyPassword="mule123" password="mule123"/>
+	</tls:context>
 	<flow name="testpipelineFlow" doc:id="f1864425-0017-4566-90e2-b83fc053f39e" >
-		<http:listener doc:name="Listener" doc:id="ab0fc100-b3b7-4d6e-a054-9ac6a3b01262" config-ref="HTTP_Listener_config" path="/test"/>
+		<http:listener doc:name="Listener" doc:id="ab0fc100-b3b7-4d6e-a054-9ac6a3b01262" config-ref="HTTP_Listener_config" path="/test/secrets/environments/dev/applications/test-v1.0"/>
 		<logger level="INFO" doc:name="Logger" doc:id="3309d364-4398-4b94-9ba6-586ff0f1b877" message="This is test"/>
 		<set-payload value="This is a  test" doc:name="Set Payload" doc:id="f081c2b5-f844-4650-85ec-02212abdf8f3" />
+		<ee:transform doc:name="Transform Message" doc:id="5c6c692e-c70a-4969-a5e2-0c794a6acdd0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"user":"test",
+	"password":"boom boom"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</flow>
 </mule>
