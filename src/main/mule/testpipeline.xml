@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	</http:listener-config>
 	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="a5ebdb62-f7e1-4c05-b6fb-5c2f883e7af1" >
 		<tls:trust-store insecure="true" />
-		<tls:key-store type="jks" path="/Users/longjam.singh/dataweavework-space/cert/test-keystore.jks" alias="test" keyPassword="mule123" password="mule123"/>
+		<tls:key-store type="jks" path="test-keystore.jks" alias="test" keyPassword="mule123" password="mule123"/>
 	</tls:context>
 	<flow name="testpipelineFlow" doc:id="f1864425-0017-4566-90e2-b83fc053f39e" >
 		<http:listener doc:name="Listener" doc:id="ab0fc100-b3b7-4d6e-a054-9ac6a3b01262" config-ref="HTTP_Listener_config" path="/test/secrets/environments/dev/applications/test-v1.0"/>
