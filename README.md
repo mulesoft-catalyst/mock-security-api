@@ -9,5 +9,6 @@ their vault to get user and password.
 V-1.0.1
 Minor update to file name and path.
 Requires basic authentication to connect.
+Client have to pass in following basic auth creds.
 User: admin
 Password : admin
